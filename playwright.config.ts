@@ -1,41 +1,40 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from "@playwright/test";
 
-import dotenv from 'dotenv';
-import path from 'path';
+import dotenv from "dotenv";
+import path from "path";
 
-const ENV = process.env.ENV || 'prod';
+const ENV = process.env.ENV || "prod";
 
-dotenv.config({ path: path.resolve(__dirname, 'configs', `.env.${ENV}`) });
+dotenv.config({ path: path.resolve(__dirname, "configs", `.env.${ENV}`) });
 
-const baseURL = process.env.BASE_URL || 'https://localhost:3000';
+const baseURL = process.env.BASE_URL || "https://localhost:3000";
 console.log(`ENV: ${ENV} | BASE_URL: ${baseURL}`);
 
 export default defineConfig({
-  testDir: './tests',
+  testDir: "./tests",
 
   use: {
-
-    trace: 'on-first-retry',
-    headless: true,
+    trace: "on-first-retry",
+    headless: false,
     baseURL,
-    screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
+    screenshot: "only-on-failure",
+    video: "retain-on-failure",
   },
 
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
     },
 
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
     },
 
     {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
     },
 
     /* Test against mobile viewports. */
