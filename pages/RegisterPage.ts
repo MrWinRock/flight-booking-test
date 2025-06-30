@@ -1,4 +1,6 @@
 import { Page, Locator, expect } from "@playwright/test";
+import { RegisterPageLocators } from "../fixtures/locator/register.page";
+import { CommonPopupLocators } from "../fixtures/locator/popup.locators";
 
 export class RegisterPage {
   readonly page: Page;
@@ -11,12 +13,12 @@ export class RegisterPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.firstName = page.getByTestId("input-first-name");
-    this.lastName = page.getByTestId("input-last-name");
-    this.email = page.getByTestId("input-email");
-    this.phone = page.getByTestId("input-phone-number");
-    this.password = page.getByTestId("input-password");
-    this.registerBtn = page.getByTestId("btn-submit");
+    this.firstName = page.getByTestId(RegisterPageLocators.firstName);
+    this.lastName = page.getByTestId(RegisterPageLocators.lastName);
+    this.email = page.getByTestId(RegisterPageLocators.email);
+    this.phone = page.getByTestId(RegisterPageLocators.phone);
+    this.password = page.getByTestId(RegisterPageLocators.password);
+    this.registerBtn = page.getByTestId(RegisterPageLocators.registerBtn);
   }
 
   async navigate() {
@@ -46,20 +48,21 @@ export class RegisterPage {
 
   async expectSuccessPopupMessage() {
     await expect(
-      this.page.getByRole("heading", { name: "Registration Successful!" })
+      this.page.getByRole("heading", {
+        name: RegisterPageLocators.popupTitle,
+      })
     ).toBeVisible();
 
     await expect(
-      this.page.getByText(
-        "Please check your email to confirm your registration.",
-        { exact: true }
-      )
+      this.page.getByText(RegisterPageLocators.popupDescription, {
+        exact: true,
+      })
     ).toBeVisible();
   }
 
   async expectErrorPopup(errorCode: string, expectedMessage: string) {
-    const errorTitle = this.page.locator("#swal2-title");
-    const errorMessage = this.page.locator("#swal2-html-container");
+    const errorTitle = this.page.locator(CommonPopupLocators.title);
+    const errorMessage = this.page.locator(CommonPopupLocators.message);
 
     await expect(errorTitle).toHaveText(`Error: ${errorCode}`);
     await expect(errorMessage).toContainText(expectedMessage);
